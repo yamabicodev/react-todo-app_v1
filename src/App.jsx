@@ -1,6 +1,8 @@
 import "./styles.css";
 import { useState } from "react";
 import { InputTodo } from "./components/InputTodo";
+import { InCompleteTodos } from "./components/InCompleteTodos";
+import { CompleteTodos } from "./components/CompleteTodos";
 
 export const App = () => {
   const [inputTodoText, setinputTodoText] = useState("");
@@ -16,14 +18,14 @@ export const App = () => {
     setinputTodoText("");
   };
 
-  const deleteTodo = (index) => {
+  const onClickDelete = (index) => {
     // 参照関係の無い新しい配列を定義
     const todos = [...incomplateTodos];
     todos.splice(index, 1);
     setIncomplateTodos(todos);
   };
 
-  const complateTodo = (index) => {
+  const onClickComplate = (index) => {
     // 参照関係の無い新しい配列を定義
     const newIncomplateTodos = [...incomplateTodos];
     newIncomplateTodos.splice(index, 1);
@@ -33,7 +35,7 @@ export const App = () => {
     setComplateTodos(newcomplateTodos);
   };
 
-  const backTodo = (index) => {
+  const onClickBack = (index) => {
     const newCompleteTodos = [...complateTodos];
     newCompleteTodos.splice(index, 1);
 
@@ -50,38 +52,18 @@ export const App = () => {
         inputTodoText={inputTodoText}
         onChange={inputTodo}
         onClick={addTodo}
+        disabled={incomplateTodos.length >= 5}
       />
-      <div className="incompleted-area">
-        <h3 className="title">未完了のTODO一覧</h3>
-        <ul id="incompleted-list">
-          {incomplateTodos.map((todo, index) => {
-            return (
-              <li key={index} className="list-row">
-                <div className="todo-item">
-                  <p className="todo">{todo}</p>
-                  <button onClick={() => complateTodo(index)}>完了</button>
-                  <button onClick={() => deleteTodo(index)}>削除</button>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-      <div className="completed-area">
-        <h3 className="title">完了済みTODO一覧</h3>
-        <ul id="completed-list">
-          {complateTodos.map((todo, index) => {
-            return (
-              <li key={index} className="list-row">
-                <div className="todo-item">
-                  <p className="todo">{todo}</p>
-                  <button onClick={() => backTodo(index)}>戻す</button>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      {incomplateTodos.length >= 5 && (
+        <p style={{ color: "red" }}>登録できるtodoは５個までだ！！</p>
+      )}
+
+      <InCompleteTodos
+        todos={incomplateTodos}
+        onClickComplate={onClickComplate}
+        onClickDelete={onClickDelete}
+      />
+      <CompleteTodos todos={complateTodos} onClickBack={onClickBack} />
     </>
   );
 };
