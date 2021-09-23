@@ -1,13 +1,11 @@
 import "./styles.css";
 import { useState } from "react";
+import { InputTodo } from "./components/InputTodo";
 
 export const App = () => {
   const [inputTodoText, setinputTodoText] = useState("");
-  const [incomplateTodos, setIncomplateTodos] = useState([
-    "TODOI-1",
-    "TODOI-2"
-  ]);
-  const [complateTodos, setComplateTodos] = useState(["TODOC-1", "TODOC-2"]);
+  const [incomplateTodos, setIncomplateTodos] = useState([]);
+  const [complateTodos, setComplateTodos] = useState([]);
   const inputTodo = (event) => setinputTodoText(event.target.value);
 
   const addTodo = () => {
@@ -21,7 +19,7 @@ export const App = () => {
   const deleteTodo = (index) => {
     // 参照関係の無い新しい配列を定義
     const todos = [...incomplateTodos];
-    todos.splice(index);
+    todos.splice(index, 1);
     setIncomplateTodos(todos);
   };
 
@@ -48,16 +46,11 @@ export const App = () => {
   return (
     <>
       <h1>TODO管理</h1>
-      <div className="input-area">
-        <input
-          id="add-text"
-          placeholder="TODOを追加"
-          type="text"
-          value={inputTodoText}
-          onChange={inputTodo}
-        />
-        <button onClick={addTodo}>追加</button>
-      </div>
+      <InputTodo
+        inputTodoText={inputTodoText}
+        onChange={inputTodo}
+        onClick={addTodo}
+      />
       <div className="incompleted-area">
         <h3 className="title">未完了のTODO一覧</h3>
         <ul id="incompleted-list">
